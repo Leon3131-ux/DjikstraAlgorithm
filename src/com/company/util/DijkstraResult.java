@@ -15,4 +15,8 @@ public class DijkstraResult {
     public double getTotalDistance() {
         return totalDistance;
     }
+
+    public Vertex getPreviousVertex() {
+        return previousVertex;
+    }
 }
