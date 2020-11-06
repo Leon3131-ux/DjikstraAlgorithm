@@ -12,9 +12,9 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         UserInputReader userInputReader = new UserInputReader();
+        AlgorithmResolver algorithmResolver = new AlgorithmResolver();
         WeightedGraph weightedGraph = userInputReader.readWeightedGraphFromUser();
         Vertex startVertex = userInputReader.getStartVertex(weightedGraph);
-        AlgorithmResolver algorithmResolver = new AlgorithmResolver();
 
         Map<Vertex, DijkstraResult> result = algorithmResolver.solveWithDijkstra(weightedGraph, startVertex);
         printDijkstra(result);
