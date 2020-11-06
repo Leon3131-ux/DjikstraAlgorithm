@@ -4,88 +4,17 @@ import com.company.domain.Vertex;
 import com.company.domain.WeightedGraph;
 import com.company.util.AlgorithmResolver;
 import com.company.util.DijkstraResult;
+import com.company.util.UserInputReader;
 
 import java.util.*;
 
 
 public class Main {
     public static void main(String[] args) {
-        WeightedGraph weightedGraph = new WeightedGraph();
+        UserInputReader userInputReader = new UserInputReader();
+        WeightedGraph weightedGraph = userInputReader.readWeightedGraphFromUser();
+        Vertex startVertex = userInputReader.getStartVertex(weightedGraph);
         AlgorithmResolver algorithmResolver = new AlgorithmResolver();
-        Scanner scan = new Scanner (System.in);
-
-        List<Vertex> vertices = new ArrayList<>();
-
-        boolean addingVertices = true;
-        while (addingVertices) {
-            System.out.println("enter a Vertex name: ");
-            String vertexName = scan.nextLine();
-            vertices.add(new Vertex(vertexName));
-            System.out.println("add another Vertex?");
-            String answer = scan.nextLine();
-            if (!answer.equals("yes") && !answer.equals("y")) {
-                addingVertices = false;
-            }
-        }
-
-        for (Vertex vertex : vertices) {
-            weightedGraph.addVertex(vertex);
-        }
-
-        boolean addingEdges = true;
-        System.out.println("Start adding Edges");
-        while (addingEdges) {
-            System.out.println("enter first Vertex name: ");
-            String firstVertexName = scan.nextLine();
-            Optional<Vertex> existingFirstVertex = vertices.stream().filter(vertex -> vertex.getName().equals(firstVertexName)).findFirst();
-            if (existingFirstVertex.isEmpty()) {
-                System.out.println("First Vertex not found");
-                continue;
-            }
-
-            System.out.println("enter second Vertex name: ");
-            String secondVertexName = scan.nextLine();
-            Optional<Vertex> existingSecondVertex = vertices.stream().filter(vertex -> vertex.getName().equals(secondVertexName)).findFirst();
-            if (existingSecondVertex.isEmpty()) {
-                System.out.println("Second Vertex not found");
-                continue;
-            }
-            double weight;
-            System.out.println("Define Weight");
-            try {
-                weight = Double.parseDouble(scan.nextLine());
-            } catch (Exception e) {
-                System.out.println("Weight invalid");
-                continue;
-            }
-
-            try{
-                weightedGraph.addEdge(existingFirstVertex.get(), existingSecondVertex.get(), weight);
-            }catch (IllegalArgumentException e){
-                System.out.println("You cant make an edge between a vertex and itself");
-                continue;
-            }
-
-            System.out.println("add another Edge?");
-            String answer = scan.nextLine();
-            if (!answer.equals("yes") && !answer.equals("y")) {
-                addingEdges = false;
-            }
-        }
-
-        boolean addingStartVertex = true;
-        Vertex startVertex = new Vertex("");
-        while (addingStartVertex) {
-            System.out.println("Define starting Vertex: ");
-            String firstVertexName = scan.nextLine();
-            Optional<Vertex> existingStartVertex = vertices.stream().filter(vertex -> vertex.getName().equals(firstVertexName)).findFirst();
-            if (existingStartVertex.isEmpty()) {
-                System.out.println("Starting Vertex not found");
-                continue;
-            }
-            addingStartVertex = false;
-            startVertex = existingStartVertex.get();
-        }
 
         Map<Vertex, DijkstraResult> result = algorithmResolver.solveWithDijkstra(weightedGraph, startVertex);
         printDijkstra(result);
