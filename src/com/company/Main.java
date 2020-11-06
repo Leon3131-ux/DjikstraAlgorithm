@@ -38,7 +38,7 @@ public class Main {
             System.out.println("enter first Vertex name: ");
             String firstVertexName = scan.nextLine();
             Optional<Vertex> existingFirstVertex = vertices.stream().filter(vertex -> vertex.getName().equals(firstVertexName)).findFirst();
-            if (!existingFirstVertex.isPresent()) {
+            if (existingFirstVertex.isEmpty()) {
                 System.out.println("First Vertex not found");
                 continue;
             }
@@ -46,7 +46,7 @@ public class Main {
             System.out.println("enter second Vertex name: ");
             String secondVertexName = scan.nextLine();
             Optional<Vertex> existingSecondVertex = vertices.stream().filter(vertex -> vertex.getName().equals(secondVertexName)).findFirst();
-            if (!existingSecondVertex.isPresent()) {
+            if (existingSecondVertex.isEmpty()) {
                 System.out.println("Second Vertex not found");
                 continue;
             }
@@ -59,7 +59,12 @@ public class Main {
                 continue;
             }
 
-            weightedGraph.addEdge(existingFirstVertex.get(), existingSecondVertex.get(), weight);
+            try{
+                weightedGraph.addEdge(existingFirstVertex.get(), existingSecondVertex.get(), weight);
+            }catch (IllegalArgumentException e){
+                System.out.println("You cant make an edge between a vertex and itself");
+                continue;
+            }
 
             System.out.println("add another Edge?");
             String answer = scan.nextLine();
@@ -74,7 +79,7 @@ public class Main {
             System.out.println("Define starting Vertex: ");
             String firstVertexName = scan.nextLine();
             Optional<Vertex> existingStartVertex = vertices.stream().filter(vertex -> vertex.getName().equals(firstVertexName)).findFirst();
-            if (!existingStartVertex.isPresent()) {
+            if (existingStartVertex.isEmpty()) {
                 System.out.println("Starting Vertex not found");
                 continue;
             }
@@ -93,11 +98,13 @@ public class Main {
             if(result.get(key) == null) {
                 System.out.print("Distance: null ");
                 System.out.print("Previous Vertex: null ");
+                System.out.println();
                 continue;
             }
             System.out.print("Distance: "+result.get(key).getTotalDistance()+" ");
             if(result.get(key).getPreviousVertex() == null) {
                 System.out.print("Previous Vertex: null ");
+                System.out.println();
                 continue;
             }
             System.out.print("Previous Vertex: "+result.get(key).getPreviousVertex().getName()+" ");
